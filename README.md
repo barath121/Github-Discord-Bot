@@ -4,8 +4,7 @@ Github Discord Bot is Discord Bot build on Node Js and Discord JS which shows gi
 - Discord JS
 - https
 - mongoose
-## Sample Images
-## User Details
+## Sample Image
 ![me](/images/me.PNG)
 ## Installation
 - Install all the packages using
