@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const { request } = require('express');
 const client = new Discord.Client();
 module.exports.UserDetails= (User_Details, msg)=> {
     const UserEmbed = new Discord.MessageEmbed()

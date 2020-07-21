@@ -2,7 +2,9 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const dotenv = require('dotenv')
 const https = require('https');
+const mongoose = require('mongoose')
 const ReplyController = require('./Controller/DiscordReplyController')
+const DatabaseController = require('./Controller/DatabaseController')
 dotenv.config();
 
 client.on('ready', () => {
@@ -15,13 +17,22 @@ client.on('message', msg => {
     if(messageSplitted[1] === 'user')
       MakeRequest('user','/users/'+messageSplitted[2],msg,messageSplitted[2])
     if(messageSplitted[1] === 'repos')  
-    MakeRequest('repos','/users/'+messageSplitted[2]+'/repos',msg,messageSplitted[2],messageSplitted[3]?parseInt(messageSplitted[3]):1)
+      MakeRequest('repos','/users/'+messageSplitted[2]+'/repos',msg,messageSplitted[2],messageSplitted[3]?parseInt(messageSplitted[3]):1)
     if(messageSplitted[1] === 'following'||messageSplitted[1]==='followers')  
-    MakeRequest(messageSplitted[1],'/users/'+messageSplitted[2]+'/'+messageSplitted[1],msg,messageSplitted[2],messageSplitted[3]?parseInt(messageSplitted[3]):1)
+      MakeRequest(messageSplitted[1],'/users/'+messageSplitted[2]+'/'+messageSplitted[1],msg,messageSplitted[2],messageSplitted[3]?parseInt(messageSplitted[3]):1)
+    if(messageSplitted[1] === 'me'){
+      if(messageSplitted[2] === 'username')
+      DatabaseController.AddUsername(messageSplitted[3],msg)
+      else if(messageSplitted[2] === 'resume')  
+      DatabaseController.AddPortfolio(msg.content.trim().split(messageSplitted[2])[1],msg)
+      else if(messageSplitted[2] === 'repo')  
+      DatabaseController.AddFavRepo(messageSplitted[3],msg)
+      else
+      DatabaseController.ShowDetails(msg)
+    }  
   }
 });
 
-client.login(process.env.Token);
 const MakeRequest = (request,path,msg,user,page)=>{
 const options = {
   host: 'api.github.com',
@@ -53,3 +64,18 @@ https.get(options, (resp) => {
   console.log("Error: " + err.message);
 });
 }
+const db = process.env.DATABASE.replace(
+  "<password>",
+  process.env.DATABASE_PASSWORD
+);
+mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+  })
+  .then(con => {
+    console.log("database connection sucessful");
+    client.login(process.env.Token);
+  });
