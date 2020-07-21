@@ -1,5 +1,10 @@
 ﻿# Github-Discord-Bot
 Github Discord Bot is Discord Bot build on Node Js and Discord JS which shows github user details in Discord and Sharing Personal Resume.
+## Libraries Used
+- Discord JS
+- https
+- mongoose
+- 
 ## Sample Images
 ## User Details
 ![me](/images/me.PNG)
