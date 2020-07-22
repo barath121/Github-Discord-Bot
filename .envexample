@@ -1,1 +1,3 @@
 Token = <Your Github Bot Token>
+DATABASE = <Your Mongo Connection String>
+DATABASE_PASSWORD = <Your Database Password>
